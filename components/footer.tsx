@@ -1,4 +1,5 @@
 import Link from "next/link"
+import { artistConfig } from "@/lib/config"
 
 export function Footer() {
   const currentYear = new Date().getFullYear()
@@ -9,7 +10,7 @@ export function Footer() {
         <div className="flex flex-col md:flex-row justify-between items-center">
           <div className="mb-6 md:mb-0">
             <p className="text-sm text-secondary">
-              &copy; {currentYear} Gay Solomon Interior Design. All rights reserved.
+              {artistConfig.siteConfig.copyright}
             </p>
           </div>
           <div className="flex space-x-6">

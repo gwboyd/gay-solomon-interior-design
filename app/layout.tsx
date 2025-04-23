@@ -19,9 +19,27 @@ const cormorant = Cormorant_Garamond({
   weight: ["300", "400", "500", "600", "700"],
 })
 
+export const viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+  themeColor: '#faf9f7'
+}
+
 export const metadata: Metadata = {
   title: artistConfig.seo.title,
-  description: artistConfig.seo.description
+  description: artistConfig.seo.description,
+  manifest: '/manifest.json',
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'default',
+    title: artistConfig.seo.title,
+  },
+  icons: {
+    icon: '/logo_icon.png',
+    apple: '/logo_icon.png',
+  }
 }
 
 export default function RootLayout({

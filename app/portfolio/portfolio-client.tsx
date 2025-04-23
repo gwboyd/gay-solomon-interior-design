@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from "react"
 import Image from "next/image"
+import { smoothScrollTo } from "@/lib/utils/smoothScroll"
 import type { Project, ProjectImage } from "@/types/project"
 
 interface PortfolioClientProps {
@@ -51,6 +52,26 @@ export default function PortfolioClient({ initialProjects }: PortfolioClientProp
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [isDialogOpen])
 
+  useEffect(() => {
+    // Prevent default scroll-to-hash behavior
+    if (typeof window !== 'undefined') {
+      // Force scroll to top immediately when component mounts
+      window.scrollTo(0, 0)
+      
+      const hash = window.location.hash
+      if (hash) {
+        const projectId = hash.replace('#', '')
+        // Use requestAnimationFrame to ensure we run after browser's layout calculations
+        requestAnimationFrame(() => {
+          const element = document.getElementById(projectId)
+          if (element) {
+            smoothScrollTo(element)
+          }
+        })
+      }
+    }
+  }, [])
+
   return (
     <>
       <section className="py-16">
@@ -58,7 +79,7 @@ export default function PortfolioClient({ initialProjects }: PortfolioClientProp
           <h1 className="text-center mb-12">Portfolio</h1>
 
           {initialProjects.map((project) => (
-            <div key={project.id} className="mb-16">
+            <div key={project.id} id={project.id.toString()} className="mb-16 scroll-mt-24">
               <h2 className="text-2xl mb-6">{project.name}</h2>
               {project.description && <p className="mb-8">{project.description}</p>}
 

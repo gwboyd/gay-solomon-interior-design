@@ -19,6 +19,7 @@ export default async function Home() {
 
   // Get the first three projects by display_order for featured section
   const featuredProjects = projects.slice(0, 3).map(project => ({
+    id: project.id,
     image: project.images?.[0]?.image_url || "/placeholder.svg?height=600&width=800",
     title: project.name,
     location: project.location || "Location TBD"
@@ -80,16 +81,18 @@ export default async function Home() {
           <div className="grid md:grid-cols-3 gap-8">
             {featuredProjects.map((item, index) => (
               <div key={index}>
-                <div className="image-container mb-4">
-                  <Image
-                    src={item.image}
-                    alt={`${item.title} project`}
-                    fill
-                    className="object-cover"
-                  />
-                </div>
-                <h3 className="text-xl mb-2">{item.title}</h3>
-                <p className="text-secondary">{item.location}</p>
+                <Link href={`/portfolio#${item.id}`} className="block">
+                  <div className="image-container mb-4">
+                    <Image
+                      src={item.image}
+                      alt={`${item.title} project`}
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
+                  <h3 className="text-xl mb-2">{item.title}</h3>
+                  <p className="text-secondary">{item.location}</p>
+                </Link>
               </div>
             ))}
           </div>

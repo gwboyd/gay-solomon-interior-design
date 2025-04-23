@@ -3,6 +3,7 @@
 import { useState } from "react"
 import Link from "next/link"
 import { Menu, X } from "lucide-react"
+import { artistConfig } from "@/lib/config"
 
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -11,7 +12,7 @@ export function Header() {
     <header className="py-6 border-b border-gray-200">
       <div className="container flex justify-between items-center">
         <Link href="/" className="text-2xl font-serif font-light tracking-wider">
-          GAY SOLOMON
+          {artistConfig.businessName}
         </Link>
 
         {/* Mobile menu button */}
@@ -41,7 +42,7 @@ export function Header() {
           <div className="fixed inset-0 bg-white z-50 md:hidden">
             <div className="container py-6 flex justify-between items-center">
               <Link href="/" className="text-2xl font-serif font-light tracking-wider">
-                GAY SOLOMON
+                {artistConfig.name}
               </Link>
               <button onClick={() => setIsMenuOpen(false)} aria-label="Close menu">
                 <X size={24} />

@@ -3,8 +3,8 @@
 export const artistConfig = {
   // Basic information
   name: "Gay Solomon",
-  businessName: "Gay Solomon Interior Design",
-  
+  businessName: "Ferguson&Solomon",
+
   // Contact information
   contact: {
     email: "gay.solomon@sbcglobal.net",
@@ -13,7 +13,7 @@ export const artistConfig = {
   
   // SEO and metadata
   seo: {
-    title: "Gay Solomon Interior Design",
+    title: "Ferguson&Solomon",
     description: "Design for the modern but comfortable home, office, and retreat"
   },
   
@@ -37,7 +37,7 @@ export const artistConfig = {
   
   // Site configuration
   siteConfig: {
-    copyright: `© ${new Date().getFullYear()} Gay Solomon Interior Design. All rights reserved.`,
+    copyright: `© ${new Date().getFullYear()} Ferguson&Solomon. All rights reserved.`,
     adminRoute: "/admin",
   }
 }
