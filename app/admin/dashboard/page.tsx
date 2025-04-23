@@ -539,36 +539,54 @@ export default function AdminDashboard() {
   }
 
   return (
-    <section className="py-16">
-      <div className="container">
-        <div className="flex justify-between items-center mb-8">
-          <h1>Admin Dashboard</h1>
-          <div className="flex gap-4">
+    <div className="container py-8">
+      <div className="space-y-6">
+        <div className="flex flex-col space-y-4">
+          <h1 className="text-2xl font-medium">Admin Dashboard</h1>
+          <div className="flex flex-wrap gap-2">
             <button
               onClick={() => setActiveTab("projects")}
-              className={`px-4 py-2 ${activeTab === "projects" ? "bg-primary text-white" : "bg-gray-100"}`}
+              className={`px-4 py-2 rounded-md ${
+                activeTab === "projects" ? "bg-primary text-white" : "bg-gray-100 hover:bg-gray-200"
+              }`}
             >
               Projects
             </button>
             <button
               onClick={() => setActiveTab("messages")}
-              className={`px-4 py-2 ${activeTab === "messages" ? "bg-gray-800 text-white" : "text-gray-600 hover:bg-gray-100"}`}
+              className={`px-4 py-2 rounded-md flex items-center gap-2 ${
+                activeTab === "messages" ? "bg-primary text-white" : "bg-gray-100 hover:bg-gray-200"
+              }`}
             >
               Messages
               {messages.filter(m => !m.read).length > 0 && (
-                <span className="ml-2 px-2 py-0.5 text-xs bg-primary text-white rounded-full">
+                <span className="px-2 py-0.5 text-xs bg-red-500 text-white rounded-full">
                   {messages.filter(m => !m.read).length}
                 </span>
               )}
             </button>
             <button
               onClick={() => setActiveTab("homepage")}
-              className={`px-4 py-2 ${activeTab === "homepage" ? "bg-primary text-white" : "bg-gray-100"}`}
+              className={`px-4 py-2 rounded-md ${
+                activeTab === "homepage" ? "bg-primary text-white" : "bg-gray-100 hover:bg-gray-200"
+              }`}
             >
               Homepage Settings
             </button>
           </div>
         </div>
+
+        {error && (
+          <div className="p-4 bg-red-50 text-red-600 rounded-md">
+            <p className="mb-6">{error}</p>
+            <button
+              onClick={() => window.location.reload()}
+              className="inline-block mt-4 px-4 py-2 bg-primary text-white hover:bg-primary/90 transition-colors"
+            >
+              Refresh Page
+            </button>
+          </div>
+        )}
 
         {activeTab === "projects" && (
           <div className="grid md:grid-cols-5 gap-6">
@@ -1292,6 +1310,6 @@ export default function AdminDashboard() {
           </div>
         </DialogContent>
       </Dialog>
-    </section>
+    </div>
   )
 }

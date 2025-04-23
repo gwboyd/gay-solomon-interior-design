@@ -1,8 +1,7 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useRef, useEffect } from "react"
 import Image from "next/image"
-import { Dialog } from "@/components/ui/dialog"
 import type { Project, ProjectImage } from "@/types/project"
 
 interface PortfolioClientProps {
@@ -13,12 +12,44 @@ export default function PortfolioClient({ initialProjects }: PortfolioClientProp
   const [selectedProject, setSelectedProject] = useState<Project | null>(null)
   const [selectedImage, setSelectedImage] = useState<ProjectImage | null>(null)
   const [isDialogOpen, setIsDialogOpen] = useState(false)
-
+  const dialogRef = useRef<HTMLDivElement>(null)
+  const closeButtonRef = useRef<HTMLButtonElement>(null)
+  
   const openDialog = (project: Project, image: ProjectImage) => {
     setSelectedProject(project)
     setSelectedImage(image)
     setIsDialogOpen(true)
   }
+  
+  const closeDialog = () => {
+    setIsDialogOpen(false)
+  }
+  
+  // Handle escape key
+  useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && isDialogOpen) {
+        closeDialog()
+      }
+    }
+    
+    window.addEventListener('keydown', handleEscape)
+    return () => window.removeEventListener('keydown', handleEscape)
+  }, [isDialogOpen])
+  
+  // Handle clicking outside
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (isDialogOpen && dialogRef.current && 
+          !dialogRef.current.contains(e.target as Node) &&
+          e.target !== closeButtonRef.current) {
+        closeDialog()
+      }
+    }
+    
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [isDialogOpen])
 
   return (
     <>
@@ -51,35 +82,34 @@ export default function PortfolioClient({ initialProjects }: PortfolioClientProp
         </div>
       </section>
 
-      {selectedProject && selectedImage && (
-        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-70">
-            <div className="bg-white max-w-4xl w-full max-h-[90vh] overflow-auto p-6">
-              <div className="flex justify-between items-center mb-6">
-                <div>
-                  <h2 className="text-2xl">{selectedImage.title}</h2>
-                  <p className="text-secondary">{selectedProject.name}</p>
-                </div>
-                <button
-                  onClick={() => setIsDialogOpen(false)}
-                  className="text-secondary hover:text-primary"
-                  aria-label="Close dialog"
-                >
-                  ✕
-                </button>
+      {isDialogOpen && selectedProject && selectedImage && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-70">
+          <div ref={dialogRef} className="bg-white max-w-4xl w-full max-h-[90vh] overflow-auto p-6">
+            <div className="flex justify-between items-center mb-6">
+              <div>
+                <h2 className="text-2xl">{selectedImage.title}</h2>
+                <p className="text-secondary">{selectedProject.name}</p>
               </div>
-              <div className="relative h-[60vh]">
-                <Image
-                  src={selectedImage.image_url || "/placeholder.svg"}
-                  alt={selectedImage.title}
-                  fill
-                  className="object-contain"
-                />
-              </div>
-              <p className="mt-6 text-secondary">{selectedImage.description}</p>
+              <button
+                ref={closeButtonRef}
+                onClick={closeDialog}
+                className="text-secondary hover:text-primary"
+                aria-label="Close dialog"
+              >
+                ✕
+              </button>
             </div>
+            <div className="relative h-[60vh]">
+              <Image
+                src={selectedImage.image_url || "/placeholder.svg"}
+                alt={selectedImage.title}
+                fill
+                className="object-contain"
+              />
+            </div>
+            <p className="mt-6 text-secondary">{selectedImage.description}</p>
           </div>
-        </Dialog>
+        </div>
       )}
     </>
   )
