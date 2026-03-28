@@ -31,7 +31,6 @@ export default function AdminDashboard() {
   const [projectImages, setProjectImages] = useState<ProjectImage[]>([])
   const [homepageSettings, setHomepageSettings] = useState<HomepageSettings | null>(null)
   const [messages, setMessages] = useState<Message[]>([])
-  const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
@@ -73,21 +72,6 @@ export default function AdminDashboard() {
 
   const router = useRouter()
 
-  // Check authentication
-  useEffect(() => {
-    const checkAuth = () => {
-      // For this demo, we'll use localStorage
-      const isAuth = localStorage.getItem("isAdminAuthenticated") === "true"
-      setIsAuthenticated(isAuth)
-
-      if (!isAuth) {
-        router.push("/admin")
-      }
-    }
-
-    checkAuth()
-  }, [router])
-
   // Load data
   useEffect(() => {
     const init = async () => {
@@ -120,7 +104,7 @@ export default function AdminDashboard() {
     }
 
     init()
-  }, [isAuthenticated])
+  }, [])
 
   // Load project images when selected project changes
   useEffect(() => {
@@ -490,26 +474,12 @@ export default function AdminDashboard() {
     }
   }
 
-  // Handle login
-  const handleLogin = () => {
+  const handleLogout = async () => {
+    await fetch("/api/admin-session/logout", {
+      method: "POST",
+    })
     router.push("/admin")
-  }
-
-  if (!isAuthenticated) {
-    return (
-      <div className="flex justify-center items-center min-h-screen">
-        <div className="text-center">
-          <h1 className="mb-4">Admin Access Required</h1>
-          <p className="mb-6">You need to log in to access the admin dashboard.</p>
-          <button
-            onClick={handleLogin}
-            className="px-6 py-3 bg-primary text-white hover:bg-primary/90 transition-colors"
-          >
-            Go to Login
-          </button>
-        </div>
-      </div>
-    )
+    router.refresh()
   }
 
   if (isLoading) {
@@ -542,7 +512,15 @@ export default function AdminDashboard() {
     <div className="container py-8">
       <div className="space-y-6">
         <div className="flex flex-col space-y-4">
-          <h1 className="text-2xl font-medium">Admin Dashboard</h1>
+          <div className="flex items-center justify-between gap-4">
+            <h1 className="text-2xl font-medium">Admin Dashboard</h1>
+            <button
+              onClick={handleLogout}
+              className="px-4 py-2 border border-gray-300 text-sm rounded-md hover:bg-gray-50"
+            >
+              Log Out
+            </button>
+          </div>
           <div className="flex flex-wrap gap-2">
             <button
               onClick={() => setActiveTab("projects")}

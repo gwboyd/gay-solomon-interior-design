@@ -46,9 +46,9 @@ A website to showcase my grandmother's interior design portfolio. This is a full
 3. Set up environment variables in a `.env.local` file:
    ```
    NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
-   NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
-   SUPABASE_SERVICE_ROLE_KEY=your_supabase_service_role_key
-   NEXT_PUBLIC_ADMIN_PASSWORD=your_admin_password
+   NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=your_supabase_publishable_key
+   SUPABASE_SECRET_KEY=your_supabase_secret_key
+   ADMIN_PASSWORD=your_admin_password
    BLOB_READ_WRITE_TOKEN=your_vercel_blob_token
    ```
 

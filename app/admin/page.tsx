@@ -1,7 +1,7 @@
 "use client"
 
 import type React from "react"
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { Eye, EyeOff } from "lucide-react"
 
@@ -18,10 +18,15 @@ export default function AdminLogin() {
     setIsLoading(true)
 
     try {
-      // In a real app, you would use Supabase Auth with email/password or magic link
-      // For this demo, we'll use a simple password check against an environment variable
-      if (password === process.env.NEXT_PUBLIC_ADMIN_PASSWORD) {
-        localStorage.setItem("isAdminAuthenticated", "true")
+      const response = await fetch("/api/admin-session/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ password }),
+      })
+
+      if (response.ok) {
         router.push("/admin/dashboard")
       } else {
         setError("Invalid password")
@@ -32,14 +37,6 @@ export default function AdminLogin() {
       setIsLoading(false)
     }
   }
-
-  // Check if already authenticated
-  useEffect(() => {
-    const isAuthenticated = localStorage.getItem("isAdminAuthenticated") === "true"
-    if (isAuthenticated) {
-      router.push("/admin/dashboard")
-    }
-  }, [router])
 
   return (
     <section className="py-16">
