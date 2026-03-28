@@ -1,157 +1,77 @@
-# Gay Solomon Interior Design Website
+# Portfolio Website Template
 
-A website to showcase my grandmother's interior design portfolio. This is a fully-functional design website that can be repurposed for any interior designer, architect, or creative professional who needs to display their work beautifully, but was originally made for her.
+A Next.js portfolio site for a creative business, with a public-facing gallery, contact form, and a password-protected admin area.
 
 ## Features
 
-- **Modern, Responsive Design:** Clean layout with a neutral color palette that works beautifully on all devices
-- **Portfolio Gallery:** Displays projects in a visually appealing grid with filtering by project type
-- **Project Details:** Clickable project images with descriptions and metadata
-- **Contact Form:** Simple contact form for potential clients to get in touch
-- **Admin Dashboard:** Password-protected admin area for content management
-  - Manage portfolio projects and images
-  - Upload and organize new images
-  - Configure homepage settings with featured projects
+- Responsive marketing site
+- Portfolio gallery and project detail pages
+- Contact form
+- Admin dashboard for content management
+- Server-authenticated admin session
+- Supabase-backed content storage
+- Vercel Blob image uploads
 
-## Technology Stack
+## Stack
 
-- **Frontend:** Next.js 15 with React 19, TypeScript
-- **Styling:** Tailwind CSS, custom components based on Radix UI primitives
-- **Database:** Supabase (PostgreSQL)
-- **Image Storage:** Vercel Blob
-- **Form Handling:** React Hook Form with Zod validation
-- **Deployment:** Configured for Vercel deployment
+- Next.js
+- React and TypeScript
+- Tailwind CSS
+- Supabase Postgres and PostgREST
+- Vercel Blob
 
-## Getting Started
+## Prerequisites
 
-### Prerequisites
+- Node.js 18+
+- npm
+- A Supabase project with a `gay_solomon` schema
+- The shared SQL migration `013_gay_solomon_policies.sql` if you want public reads and contact-form inserts through Supabase
 
-- Node.js 18.17 or later
-- Supabase account for database functionality
-- Vercel account for deployment and Blob storage
+## Environment Variables
 
-### Installation
+Create `.env.local` with:
 
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/yourusername/gay-solomon-interior-design.git
-   cd gay-solomon-interior-design
-   ```
+```bash
+NEXT_PUBLIC_SUPABASE_URL=<your Supabase project URL>
+SUPABASE_SECRET_KEY=<your Supabase secret key>
+ADMIN_PASSWORD=<your admin password>
+BLOB_READ_WRITE_TOKEN=<your Vercel Blob token>
+```
 
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
+Notes:
+- `SUPABASE_SECRET_KEY` is server-only and used for admin operations.
+- `ADMIN_PASSWORD` is server-only and used to create a signed admin session cookie.
 
-3. Set up environment variables in a `.env.local` file:
-   ```
-   NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
-   NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=your_supabase_publishable_key
-   SUPABASE_SECRET_KEY=your_supabase_secret_key
-   ADMIN_PASSWORD=your_admin_password
-   BLOB_READ_WRITE_TOKEN=your_vercel_blob_token
-   ```
+## Installation
 
-4. Run the development server:
-   ```bash
-   npm run dev
-   ```
+```bash
+npm install
+npm run dev
+```
 
-5. Open [http://localhost:3000](http://localhost:3000) to view the site
+Open `http://localhost:3000`. Admin access is available at `/admin`.
 
-### Database Setup
+## Security Model
 
-1. Create the necessary tables in your Supabase database using the schema defined in the project
-2. Access `/admin` and use your admin password to log in
-
-## Usage
-
-- **Public Site:** Access the main website to view the portfolio and contact information
-- **Admin Portal:** Access `/admin` and log in with your password to manage content
-- **Portfolio Management:** Add, edit, and remove projects and images through the admin dashboard
+- Admin authentication is handled on the server.
+- Successful login creates a signed, secure cookie session.
+- Middleware protects admin routes.
+- Admin data changes run server-side with the Supabase secret key.
+- Public portfolio reads and contact form inserts can be allowed with `013_gay_solomon_policies.sql`.
 
 ## Customization
 
-This project was created for my grandmother but is designed to be easily customizable:
-
-### Artist Configuration
-
-The site has a centralized artist configuration file at `lib/config.ts` that contains all artist-specific information:
-
-```typescript
-// Update this file to customize for different artists
-export const artistConfig = {
-  // Basic information
-  name: "Your Name",
-  businessName: "Your Business Name",
-  
-  // Contact information
-  contact: {
-    email: "your.email@example.com",
-    phone: "+1 (123) 456-7890",
-  },
-  
-  // SEO and metadata
-  seo: {
-    title: "Your Business Name",
-    description: "Your business description",
-  },
-  
-  // Marketing content
-  marketing: {
-    tagline: "Your tagline here",
-    subTagline: "Secondary tagline or description",
-    aboutDescription: [
-      "First paragraph about your business.",
-      "Second paragraph with more details."
-    ],
-  },
-  
-  // Social media links
-  social: {
-    instagram: "",
-    facebook: "",
-    linkedin: "",
-    houzz: "",
-  },
-  
-  // Site configuration
-  siteConfig: {
-    copyright: `© ${new Date().getFullYear()} Your Business Name. All rights reserved.`,
-    adminRoute: "/admin",
-  }
-}
-```
-
-This configuration is used throughout the application, making it easy to adapt the site for different artists without modifying multiple files.
-
-Additional customizations:
-- Update the logo, colors, and typography in the relevant CSS files
-- Customize the admin dashboard for your specific needs
-- Add additional features like testimonials, services pages, or blog functionality
-
-## Deployment
-
-The project is configured for deployment on Vercel:
-
-1. Connect your GitHub repository to Vercel
-2. Configure the environment variables in the Vercel dashboard
-3. Deploy the project
+Update `lib/config.ts` to change:
+- business name and branding
+- contact details
+- SEO metadata
+- marketing copy
+- social links
 
 ## Project Structure
 
-- `app/` - Next.js app router pages and server components
-- `components/` - Reusable UI components
-- `lib/` - Utility functions and configuration
-- `public/` - Static assets including images
-- `types/` - TypeScript type definitions
-- `styles/` - Global CSS and styling utilities
-
-## Acknowledgements
-
-- I wrote very little of this code, almost all vibe coded
-- Built with [Next.js](https://nextjs.org/)
-- UI components from [Radix UI](https://www.radix-ui.com/)
-- Styling with [Tailwind CSS](https://tailwindcss.com/)
-- Database by [Supabase](https://supabase.io/)
-- Image hosting by [Vercel Blob](https://vercel.com/docs/storage/vercel-blob)
+- `app/` routes, pages, server actions, and API handlers
+- `components/` reusable UI
+- `lib/` configuration, Supabase client helpers, and admin session helpers
+- `public/` static assets
+- `types/` shared TypeScript types
