@@ -1,5 +1,7 @@
 "use server"
 
+import { requireAdminSession } from "@/lib/require-admin"
+
 import { createServerSupabaseClient } from "@/lib/supabase"
 import type { Message, NewMessage } from "@/types/project"
 
@@ -24,6 +26,8 @@ export async function createMessage(message: NewMessage): Promise<{ success: boo
 }
 
 export async function getMessages(): Promise<Message[]> {
+  await requireAdminSession()
+
   const supabase = createServerSupabaseClient()
 
   const { data, error } = await supabase
@@ -40,6 +44,8 @@ export async function getMessages(): Promise<Message[]> {
 }
 
 export async function markMessageAsRead(id: number): Promise<{ success: boolean; error?: string }> {
+  await requireAdminSession()
+
   try {
     const supabase = createServerSupabaseClient()
 
@@ -58,6 +64,8 @@ export async function markMessageAsRead(id: number): Promise<{ success: boolean;
 }
 
 export async function deleteMessage(id: number): Promise<{ success: boolean; error?: string }> {
+  await requireAdminSession()
+
   try {
     const supabase = createServerSupabaseClient()
 
