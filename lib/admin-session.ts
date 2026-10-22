@@ -70,18 +70,28 @@ export async function createAdminSessionToken() {
 }
 
 export async function verifyAdminSessionToken(token: string) {
-  const [encodedPayload, signature] = token.split(".")
+  try {
+    const parts = token.split(".")
+    const [encodedPayload, signature] = parts
 
-  if (!encodedPayload || !signature) {
+    if (parts.length !== 2 || !encodedPayload || !signature) {
+      return false
+    }
+
+    const expectedSignature = await sign(encodedPayload)
+
+    if (expectedSignature !== signature) {
+      return false
+    }
+
+    const payload = JSON.parse(new TextDecoder().decode(base64UrlToBytes(encodedPayload))) as AdminSession
+    return (
+      payload?.role === "admin" &&
+      typeof payload.exp === "number" &&
+      Number.isFinite(payload.exp) &&
+      payload.exp > Math.floor(Date.now() / 1000)
+    )
+  } catch {
     return false
   }
-
-  const expectedSignature = await sign(encodedPayload)
-
-  if (expectedSignature !== signature) {
-    return false
-  }
-
-  const payload = JSON.parse(new TextDecoder().decode(base64UrlToBytes(encodedPayload))) as AdminSession
-  return payload.role === "admin" && payload.exp > Math.floor(Date.now() / 1000)
 }

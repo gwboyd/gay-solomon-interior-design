@@ -1,5 +1,7 @@
 "use server"
 
+import { requireAdminSession } from "@/lib/require-admin"
+
 import { createServerSupabaseClient } from "@/lib/supabase"
 import { revalidatePath } from "next/cache"
 import type {
@@ -87,6 +89,8 @@ export async function getProjectWithImages(id: number): Promise<Project | null> 
 }
 
 export async function createProject(project: NewProject): Promise<{ success: boolean; id?: number; error?: string }> {
+  await requireAdminSession()
+
   try {
     const supabase = createServerSupabaseClient()
 
@@ -111,6 +115,8 @@ export async function createProject(project: NewProject): Promise<{ success: boo
 }
 
 export async function updateProject(project: UpdateProject): Promise<{ success: boolean; error?: string }> {
+  await requireAdminSession()
+
   try {
     const supabase = createServerSupabaseClient()
 
@@ -138,6 +144,8 @@ export async function updateProject(project: UpdateProject): Promise<{ success: 
 }
 
 export async function deleteProject(id: number): Promise<{ success: boolean; error?: string }> {
+  await requireAdminSession()
+
   try {
     const supabase = createServerSupabaseClient()
 
@@ -167,6 +175,8 @@ export async function updateProjectOrder(
   id: number,
   direction: "up" | "down",
 ): Promise<{ success: boolean; error?: string }> {
+  await requireAdminSession()
+
   try {
     const supabase = createServerSupabaseClient()
 
@@ -267,6 +277,8 @@ export async function createProjectImage(
   projectImage: NewProjectImage,
   imageFile: File,
 ): Promise<{ success: boolean; id?: number; error?: string }> {
+  await requireAdminSession()
+
   try {
     const supabase = createServerSupabaseClient()
 
@@ -312,6 +324,8 @@ export async function updateProjectImage(
   projectImage: UpdateProjectImage,
   imageFile?: File,
 ): Promise<{ success: boolean; error?: string }> {
+  await requireAdminSession()
+
   try {
     const supabase = createServerSupabaseClient()
 
@@ -353,6 +367,8 @@ export async function updateProjectImage(
 }
 
 export async function deleteProjectImage(id: number): Promise<{ success: boolean; error?: string }> {
+  await requireAdminSession()
+
   try {
     const supabase = createServerSupabaseClient()
 
@@ -382,6 +398,8 @@ export async function updateProjectImageOrder(
   id: number,
   direction: "up" | "down",
 ): Promise<{ success: boolean; error?: string }> {
+  await requireAdminSession()
+
   try {
     const supabase = createServerSupabaseClient()
 
@@ -471,6 +489,8 @@ export async function getHomepageSettings(): Promise<HomepageSettings | null> {
 export async function updateHomepageSettings(
   settings: Partial<HomepageSettings>,
 ): Promise<{ success: boolean; error?: string }> {
+  await requireAdminSession()
+
   try {
     const supabase = createServerSupabaseClient()
 
